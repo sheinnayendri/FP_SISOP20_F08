@@ -25,7 +25,64 @@ Lima Command yang kami pilih:
 #
 
 ## tail
+Command tail meminta kami untuk menampilkan bagian terakhir (10 baris secara default) dari satu atau lebih file atau data yang disalurkan.
+```
+Contoh: tail file1.c file2.c file3.txt
+```
+Maka akan ditampilkan 10 baris terakhir dari masing-masing ```file1.c```, ```file2.c```, dan ```file3.txt```.
 
+Kami menggunakan buffer untuk membaca isi dari tiap file yang kemudian dicek jika menemukan karakter ```\n```, maka akan menambahkan nilai variabel ```lines``` yang menyimpan banyaknya baris yang ada pada file tersebut. Kemudian mencari startLine yang akan dicetak dengan menghitung ```lines - 10 + 1```, apabila ingin mengambil 10 baris terakhir.
+
+Semua yang dibaca dalam buffer akan di-*append* menjadi 1 string panjang, kemudian akan diloop ulang setelah mengetahui mulai baris ke berapa akan dicetak, di mana hanya menambahkan if index baris sekarang sudah lebih atau sama dengan startLine, maka baris tersebut akan dicetak.
+
+Sama halnya seperti command lainnya, pada fungsi ```main``` juga dilakukan pengecekan argumen, harus minimal ada 1 argumen, kemudian argumennya tersebut harus merupakan file yang bisa dibaca (O_RDONLY).
+
+Berikut implementasi tail:
+```c
+int main (int argc, char *argv[]) {
+  int fd, i, j, n, lines = 0, toPrint, c = 0, startLine;
+  if(argc <= 1) {
+    printf(1, "tail: need argument at least 1 argument!");
+    exit();
+  }
+  for(j = 1; j < argc; j++)
+  {
+    lines = 0, toPrint = 0, c = 0, startLine = 0;
+    if((fd = open(argv[j], O_RDWR)) < 0) {
+      printf(1, "tail: cannot open %s for reading\n", argv[j]);
+      exit();
+    }
+    printf(1, "==> %s <==\n", argv[j]);
+    char *buffer;
+    buffer = (char*) malloc(1000000 * sizeof(char));
+    int buffSize = 0;
+    while((n = read(fd, buf, sizeof(buf))) > 0)
+    {
+      for(i = 0; i < n; i++)
+      {
+        buffer[buffSize] = (char)buf[i];
+        buffSize++;
+        if(buf[i] == '\n') lines++;
+      }
+    }
+    if(n < 0) {
+      printf(1, "tail: read error\n");
+      exit();
+    }
+    if(lines < 10) toPrint = 0;
+    else toPrint = 10;
+    startLine = lines - toPrint + 1;
+    for(i = 0; i < buffSize; i++)
+    {
+      if(c >= startLine) printf(1, "%c", buffer[i]);
+      if(buffer[i] == '\n') c++;
+    }
+    printf(1, "\n");
+    if(j != argc - 1) printf(1, "\n");
+  }
+  exit();
+}
+```
 #
 
 ## base64
