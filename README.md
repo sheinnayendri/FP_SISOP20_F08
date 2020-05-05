@@ -31,7 +31,7 @@ Contoh: tail file1.c file2.c file3.txt
 ```
 Maka akan ditampilkan 10 baris terakhir dari masing-masing ```file1.c```, ```file2.c```, dan ```file3.txt```.
 
-Kami menggunakan buffer untuk membaca isi dari tiap file yang kemudian dicek jika menemukan karakter ```\n```, maka akan menambahkan nilai variabel ```lines``` yang menyimpan banyaknya baris yang ada pada file tersebut. Kemudian mencari startLine yang akan dicetak dengan menghitung ```lines - 10 + 1```, apabila ingin mengambil 10 baris terakhir.
+Kami menggunakan buffer untuk membaca isi dari tiap file yang kemudian dicek jika menemukan karakter ```\n```, maka akan menambahkan nilai variabel ```lines``` yang menyimpan banyaknya baris yang ada pada file tersebut. Kemudian mencari startLine yang akan dicetak dengan menghitung ```lines - 10 + 1```, apabila ingin mengambil 10 baris terakhir, jika lines kurang dari 10, maka semua lines akan dicetak.
 
 Semua yang dibaca dalam buffer akan di-*append* menjadi 1 string panjang, kemudian akan diloop ulang setelah mengetahui mulai baris ke berapa akan dicetak, di mana hanya menambahkan if index baris sekarang sudah lebih atau sama dengan startLine, maka baris tersebut akan dicetak.
 
@@ -69,7 +69,7 @@ int main (int argc, char *argv[]) {
       printf(1, "tail: read error\n");
       exit();
     }
-    if(lines < 10) toPrint = 0;
+    if(lines < 10) toPrint = lines;
     else toPrint = 10;
     startLine = lines - toPrint + 1;
     for(i = 0; i < buffSize; i++)
