@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
       printf(1, "tail: read error\n");
       exit();
     }
-    if(lines < 10) toPrint = 0;
+    if(lines < 10) toPrint = lines;
     else toPrint = 10;
     startLine = lines - toPrint + 1;
     for(i = 0; i < buffSize; i++)
