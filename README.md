@@ -327,6 +327,7 @@ int main (int argc, char *argv[]) {
 }
 ```
 Contoh saat command tail dijalankan:
+
 ![tail](https://user-images.githubusercontent.com/48936125/81304618-80057180-90a7-11ea-91c2-597286a010a2.jpg)
 #
 
@@ -441,5 +442,6 @@ main(int argc, char *argv[])
 ```
 
 Contoh saat command base64 dijalankan untuk *encoding* file README:
+
 ![base64](https://user-images.githubusercontent.com/48936125/81304519-5a786800-90a7-11ea-8c5b-61c5562c90ea.jpg)
 #
