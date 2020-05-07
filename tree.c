@@ -1,6 +1,7 @@
 #include "types.h"
 #include "stat.h"
 #include "user.h"
+#include "fcntl.h"
 #include "fs.h"
 
 #define MAX_LEVEL 500
@@ -58,65 +59,64 @@ void tree(char *path, int depth, int indent, int flag)
         return;
     }
     int k, id;
-    switch (st.type)
+    if (!flag && st.type == 2) {
+	k = 0;
+	char pjg[100];
+	id = indent * 4;
+	while(k <= id) pjg[k++] = ' ';
+	pjg[k++] = '|'; pjg[k++] = '-'; pjg[k++] = '-'; pjg[k] = ' ';
+	printf(1, "%s%s\n", pjg, fmtname(path));
+	nfile++;
+    }
+    else if (st.type == 1 && strlen(path) + 1 + DIRSIZ + 1 > sizeof buf)
     {
-    case T_FILE:
-	if (!flag) {
-	    k = 0;
-       	    char pjg[100];
-	    id = indent * 4;
-	    while(k <= id) pjg[k++] = ' ';
-	    pjg[k++] = '|'; pjg[k++] = '-'; pjg[k++] = '-'; pjg[k] = ' ';
-	    printf(1, "%s%s\n", pjg, fmtname(path));
-	    nfile++;
-	}
-        break;
-
-    case T_DIR:
-        if (strlen(path) + 1 + DIRSIZ + 1 > sizeof buf)
-        {
-            printf(1, "tree: path too long\n");
-            break;
-        }
-        strcpy(buf, path);
-        p = buf + strlen(buf);
-        *p++ = '/';
-        while (read(fd, &de, sizeof(de)) == sizeof(de))
-        {
-            if (de.inum == 0)
-                continue;
-            memmove(p, de.name, DIRSIZ);
-            if (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0) continue;
-            p[DIRSIZ] = 0;
-            if (stat(buf, &st) < 0)
-            {
-                printf(1, "tree: cannot stat %s\n", buf);
-                continue;
-            }
-            else 
+	printf(1, "tree: path too long\n");
+    }
+    else if(st.type == 1)
+    {
+	strcpy(buf, path);
+	p = buf + strlen(buf);
+	*p++ = '/';
+	while (read(fd, &de, sizeof(de)) == sizeof(de))
+	{
+	    if (de.inum == 0) continue;
+ 	    memmove(p, de.name, DIRSIZ);
+	    if (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0) continue;
+	    p[DIRSIZ] = 0;
+	    if (stat(buf, &st) < 0)
 	    {
-		int kk; kk = 0;
-		char pjg2[100];
-		id = indent * 4;
-		while(kk <= id) pjg2[kk++] = ' ';
-		pjg2[kk++] = '|'; pjg2[kk++] = '-'; pjg2[kk++] = '-'; pjg2[kk] = ' ';
-	        printf(1, "%s%s\n", pjg2, fmtname(buf));
-		ndir++;
+	        printf(1, "tree: cannot stat %s\n", buf);
+	        continue;
 	    }
-            
-            if (st.type == 1){
-                // indent++;
-                tree(buf, depth + 1, indent + 1, flag);
-            }
-        }
-        break;
+	    else if (st.type == 1) //directory
+	    {
+	        int kk; kk = 0;
+ 	        char pjg2[100];
+	        id = indent * 4;
+	        while(kk <= id) pjg2[kk++] = ' ';
+	        pjg2[kk++] = '|'; pjg2[kk++] = '-'; pjg2[kk++] = '-'; pjg2[kk] = ' ';
+	        printf(1, "%s%s\n", pjg2, fmtname(buf));
+	        ndir++;
+	    }
+	    else if (st.type == 2 && !flag) //file
+	    {
+		k = 0;
+		char pjg[100];
+		id = indent * 4;
+		while(k <= id) pjg[k++] = ' ';
+		pjg[k++] = '|'; pjg[k++] = '-'; pjg[k++] = '-'; pjg[k] = ' ';
+		printf(1, "%s%s\n", pjg, fmtname(buf));
+		nfile++;
+	    }
+	    if (st.type == 1) tree(buf, depth + 1, indent + 1, flag);
+	}
     }
     close(fd);
 }
 
 int main(int argc, char *argv[])
 {
-    if (argc == 3 || argc >= 5) {
+    if (argc >= 5) {
 	printf(1, "tree: invalid argument\n");
 	exit();
     }
