@@ -183,6 +183,7 @@ int main(int argc, char *argv[])
 }
 ```
 Contoh saat command tree dijalankan:
+
 ![tree](https://user-images.githubusercontent.com/48936125/81302806-066c8400-90a5-11ea-87a6-5e003d0a3f08.jpg)
 #
 
@@ -262,6 +263,7 @@ int main (int argc, char *argv[]) {
 }
 ```
 Contoh saat command cmp dijalankan untuk membandingkan 2 file:
+
 ![cmp](https://user-images.githubusercontent.com/48936125/81304769-b511c400-90a7-11ea-9821-3914c157bf9a.jpg)
 #
 
