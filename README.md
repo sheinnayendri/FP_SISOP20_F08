@@ -149,7 +149,7 @@ Kemudian, untuk menghitung banyaknya file dan direktori, maka setiap akan diceta
 
 Untuk menampilkan agar struktur tree lebih mirip command tree sebenarnya pada linux, maka kami menggunakan ```|-- ``` untuk menandakan setiap ada file/direktori yang ingin ditampilkan, dikarenakan indentasi itu mengambil 4 spasi, maka untuk tiap level kedalaman, nanti akan diberikan spasi sebanyak kedalaman * 4, agar indentasi sesuai dan terlihat rapi:
 
-gambar
+![tree](https://user-images.githubusercontent.com/48936125/81302806-066c8400-90a5-11ea-87a6-5e003d0a3f08.jpg)
 
 Berikut implementasi main, di mana hanya dilakukan pemanggilan terhadap fungsi tree, sesuai argumen yang diinputkan user:
 ```c
