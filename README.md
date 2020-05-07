@@ -12,7 +12,7 @@ Lima Command yang kami pilih:
 5. [base64](#base64)
 #
 Agar kelima command dapat dicompile dan dirun pada QEMU, maka harus dilakukan edit pada file ```Makefile``` pada 2 bagian:
-1. UPROGS, ditambahkan nama command yang dibuat dalam format ```_/command```.
+1. UPROGS, ditambahkan nama command yang dibuat dalam format ```_command\```.
 2. EXTRA, ditambahkan file .c yang memuat implementasi command tersebut dalam format ```command.c```.
 #
 
@@ -147,9 +147,7 @@ int isNumber(char *s)
 
 Kemudian, untuk menghitung banyaknya file dan direktori, maka setiap akan dicetak file/direktori yang ditemukan, maka variabel bertipa global ```nfile``` dan ```ndir``` akan di-*increment* nilainya, agar terakhir dapat ditampilkan banyaknya.
 
-Untuk menampilkan agar struktur tree lebih mirip command tree sebenarnya pada linux, maka kami menggunakan ```|-- ``` untuk menandakan setiap ada file/direktori yang ingin ditampilkan, dikarenakan indentasi itu mengambil 4 spasi, maka untuk tiap level kedalaman, nanti akan diberikan spasi sebanyak kedalaman * 4, agar indentasi sesuai dan terlihat rapi:
-
-![tree](https://user-images.githubusercontent.com/48936125/81302806-066c8400-90a5-11ea-87a6-5e003d0a3f08.jpg)
+Untuk menampilkan agar struktur tree lebih mirip command tree sebenarnya pada linux, maka kami menggunakan ```|-- ``` untuk menandakan setiap ada file/direktori yang ingin ditampilkan, dikarenakan indentasi itu mengambil 4 spasi, maka untuk tiap level kedalaman, nanti akan diberikan spasi sebanyak kedalaman * 4, agar indentasi sesuai dan terlihat rapi.
 
 Berikut implementasi main, di mana hanya dilakukan pemanggilan terhadap fungsi tree, sesuai argumen yang diinputkan user:
 ```c
@@ -184,6 +182,8 @@ int main(int argc, char *argv[])
     exit();
 }
 ```
+Contoh saat command tree dijalankan:
+![tree](https://user-images.githubusercontent.com/48936125/81302806-066c8400-90a5-11ea-87a6-5e003d0a3f08.jpg)
 #
 
 ## cmp
@@ -261,6 +261,8 @@ int main (int argc, char *argv[]) {
   exit();
 }
 ```
+Contoh saat command cmp dijalankan untuk membandingkan 2 file:
+![cmp](https://user-images.githubusercontent.com/48936125/81304769-b511c400-90a7-11ea-9821-3914c157bf9a.jpg)
 #
 
 ## tail
@@ -322,6 +324,8 @@ int main (int argc, char *argv[]) {
   exit();
 }
 ```
+Contoh saat command tail dijalankan:
+![tail](https://user-images.githubusercontent.com/48936125/81304618-80057180-90a7-11ea-91c2-597286a010a2.jpg)
 #
 
 ## base64
@@ -433,4 +437,7 @@ main(int argc, char *argv[])
   exit();
 }
 ```
+
+Contoh saat command base64 dijalankan untuk *encoding* file README:
+![base64](https://user-images.githubusercontent.com/48936125/81304519-5a786800-90a7-11ea-8c5b-61c5562c90ea.jpg)
 #
