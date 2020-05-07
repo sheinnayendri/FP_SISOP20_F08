@@ -8,7 +8,7 @@ char buf [1000000];
 int main (int argc, char *argv[]) {
   int fd, i, j, n, lines = 0, toPrint, c = 0, startLine;
   if(argc <= 1) {
-    printf(1, "tail: need argument at least 1 argument!");
+    printf(1, "tail: need at least 1 argument!");
     exit();
   }
   for(j = 1; j < argc; j++)
@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
       printf(1, "tail: read error\n");
       exit();
     }
-    if(lines < 10) toPrint = lines;
+    if(lines < 10) toPrint = lines + 1;
     else toPrint = 10;
     startLine = lines - toPrint + 1;
     for(i = 0; i < buffSize; i++)
