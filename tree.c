@@ -5,7 +5,7 @@
 
 #define MAX_LEVEL 500
 // int tag = 0;
-int level = 0;
+int level = 1;
 // int indent = 0;
 char *
 fmtname(char *path)
@@ -29,7 +29,7 @@ fmtname(char *path)
 void ls(char *path, int depth, int indent)
 {
     if (depth == level)
-        exit();
+        return;
 
     char buf[512], *p;
     int fd;
@@ -80,7 +80,7 @@ void ls(char *path, int depth, int indent)
             
             if (st.type == 1){
                 // indent++;
-                ls(buf, level + 1, indent + 1);
+                ls(buf, depth + 1, indent + 1);
             }
         }
         break;
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     if (strcmp(argv[1],"-L") == 0 )
     {
         level = atoi(argv[2]);
-        ls(".", 0, level);
+        ls(".", 0, 0);
     }
     
     exit();
