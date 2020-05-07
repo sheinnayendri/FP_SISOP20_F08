@@ -55,7 +55,7 @@ int main (int argc, char *argv[]) {
   if(buffSize > buffSize2) {
   	for(i = 0; i < buffSize; i++) {
   	  if(buffer[i] != buffer2[i]) {
-  	    printf(1, "%s %s differ: byte %d, line %d\n", argv[1], argv[2], i, lines);
+  	    printf(1, "%s %s differ: byte %d, line %d\n", argv[1], argv[2], i + 1, lines);
   	    exit();
 	  }
 	  if(buffer[i] == '\n') lines++;
