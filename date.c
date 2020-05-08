@@ -1,8 +1,8 @@
-#include "types.h" // this file has all the datatypes
-#include "user.h"  // this file has the prototypes of all the system calls
-#include "date.h"  // this file contains definition of struct rtcdate
+#include "types.h"
+#include "user.h"
+#include "date.h"
+#include "stat.h"
 
-// prototypes of all the functions used
 long long power(int, int);
 int check_leap(int);
 void month_name(int);
@@ -15,31 +15,36 @@ void particular_day(char *);
 void utc_day(void);
 void day(char *);
 void spesial_format(char argv[]);
-// main
+
 int main(int argc, char *argv[])
 {
-  // if user only types date in the command prompt
   if (argc == 1)
-    today(); // this function prints today's date and current time (IST format)
+    today();
   else if (argc == 2)
   {
     if ((strcmp("-u", *(argv + 1)) == 0))
       utc_day();
-      else if (argv[1][0] == '%')
-      {
-        spesial_format(argv[1]);
-        printf(1, "\n");
-      }
-      
+    else
+      printf(1, "Invalid command. Please try again.\n");
   }
   
   else
   {
-    // if user uses -d option with the date command
-    if ((argc == 3) && (strcmp("-d", *(argv + 1)) == 0))
-      day(*(argv + 2)); // this function checks which option is chosen by user
-                        // it then calls a suitable function to implement that option
-    // if the user types an invalid command
+    if (argc == 3)
+    {
+      if ((strcmp("-d", *(argv + 1)) == 0))
+        day(*(argv + 2)); 
+      else if (argv[2][0] == '"' && argv[2][1] == '%' && argv[2][strlen(argv[2])-1] == '"')
+      {
+        spesial_format(argv[2]);
+        printf(1, "\n");
+      }
+      else if((strcmp("-r", *(argv + 1)) == 0)) {
+	printf(1, "Last modification time of file.\n");
+      }
+      else
+        printf(1, "Invalid command. Please try again.\n");
+    }
     else
       printf(1, "Invalid command. Please try again.\n");
   }
@@ -57,29 +62,34 @@ void spesial_format(char argv[])
   // printf(1, " %d/%d/%d\n", r.day, r.month, r.year);
   // printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
   // printf(1, "panjang %d \n%s\n", strlen(argv), argv);
-  for (int i = 0; i < strlen(argv); i++)
+  for (int i = 1; i < strlen(argv)-1; i++)
   {
     if (argv[i] == '%')
     {
       if (argv[i+1] == 'D')
       {
         printf(1, "%d/%d/%d", r.month, r.day, r.year);
-        // printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
+
       }
       else if (argv[i+1] == 'd')
       {
         printf(1, "%d", r.day);
-        // printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
+
       }
       else if (argv[i+1] == 'm')
       {
         printf(1, "%d", r.month);
-        // printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
+
       }
       else if (argv[i+1] == 'y')
       {
         printf(1, "%d", r.year);
-        // printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
+
+      }
+      else if (argv[i+1] == 't')
+      {
+        time();
+
       }
       else
       {
@@ -97,7 +107,6 @@ void spesial_format(char argv[])
   
 }
 
-// this function calculate a power b
 long long power(int x, int y)
 {
   long long res = 1;
@@ -108,7 +117,6 @@ long long power(int x, int y)
   return (res);
 }
 
-// this function whether the current year is a leap year
 int check_leap(int x)
 {
   int flag = 0;
@@ -123,7 +131,6 @@ int check_leap(int x)
   return (flag);
 }
 
-// this function prints the name of the month of the year
 void month_name(int x)
 {
   switch (x)
@@ -167,7 +174,6 @@ void month_name(int x)
   }
 }
 
-// this function prints the name of the day of the week
 void day_name(int x, int y, int z)
 {
   int initial_day = 4;
@@ -227,7 +233,6 @@ void day_name(int x, int y, int z)
   }
 }
 
-// this function prints the current time in IST format
 void time()
 {
   struct rtcdate r;
@@ -259,7 +264,6 @@ void yesterday()
     exit();
   }
 
-  // if month is march
   if (r.month == 3)
   {
     if (check_leap(r.year))
