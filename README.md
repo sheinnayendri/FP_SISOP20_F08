@@ -294,7 +294,7 @@ void time()
   printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
 }
 ```
-Contoh saat command tree dijalankan:
+Contoh saat command date dijalankan:
 
 ![date](https://user-images.githubusercontent.com/48936125/81392456-ea222300-9148-11ea-9623-fb13a15a1453.jpg)
 #
