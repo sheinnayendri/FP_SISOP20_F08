@@ -55,6 +55,244 @@ Untuk implementasi command date, harus secara manual melakukan *parsing* dari se
 
 Berikut implementasi command date, beserta fungsi-fungsinya:
 ```c
+int main(int argc, char *argv[])
+{
+  if (argc == 1)
+    today();
+  else if (argc == 2)
+  {
+    if ((strcmp("-u", *(argv + 1)) == 0))
+      utc_day();
+    else
+      printf(1, "Invalid command. Please try again.\n");
+  }
+  
+  else
+  {
+    if (argc == 3)
+    {
+      if ((strcmp("-d", *(argv + 1)) == 0))
+        day(*(argv + 2)); 
+      else if (argv[2][0] == '"' && argv[2][1] == '%' && argv[2][strlen(argv[2])-1] == '"')
+      {
+        spesial_format(argv[2]);
+        printf(1, "\n");
+      }
+      else if((strcmp("-r", *(argv + 1)) == 0)) {
+	printf(1, "Last modification time of file.\n");
+      }
+      else
+        printf(1, "Invalid command. Please try again.\n");
+    }
+    else
+      printf(1, "Invalid command. Please try again.\n");
+  }
+  exit();
+}
+
+void spesial_format(char argv[])
+{
+  struct rtcdate r;
+  if (date(&r))
+  {
+    printf(2, "date failed\n");
+    exit();
+  }
+  // printf(1, " %d/%d/%d\n", r.day, r.month, r.year);
+  // printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
+  // printf(1, "panjang %d \n%s\n", strlen(argv), argv);
+  for (int i = 1; i < strlen(argv)-1; i++)
+  {
+    if (argv[i] == '%')
+    {
+      if (argv[i+1] == 'D')
+      {
+        printf(1, "%d/%d/%d", r.month, r.day, r.year);
+
+      }
+      else if (argv[i+1] == 'd')
+      {
+        printf(1, "%d", r.day);
+
+      }
+      else if (argv[i+1] == 'm')
+      {
+        printf(1, "%d", r.month);
+
+      }
+      else if (argv[i+1] == 'y')
+      {
+        printf(1, "%d", r.year);
+
+      }
+      else if (argv[i+1] == 't')
+      {
+        time();
+
+      }
+      else
+      {
+        printf(1, "invalid command\n");
+        exit();
+      }
+      i++;
+    }
+    else if(argv[i] == '-')
+    {
+      printf (1, "-");
+    }
+
+  }
+  
+}
+
+long long power(int x, int y)
+{
+  long long res = 1;
+  for (int i = 0; i < y; i++)
+  {
+    res = res * x;
+  }
+  return (res);
+}
+
+int check_leap(int x)
+{
+  int flag = 0;
+  if (x % 400 == 0)
+    flag = 1;
+  else if (x % 100 == 0)
+    flag = 0;
+  else if (x % 4 == 0)
+    flag = 1;
+  else
+    flag = 0;
+  return (flag);
+}
+
+void month_name(int x)
+{
+  switch (x)
+  {
+  case 1:
+    printf(1, " Jan");
+    break;
+  case 2:
+    printf(1, " Feb");
+    break;
+  case 3:
+    printf(1, " Mar");
+    break;
+  case 4:
+    printf(1, " Apr");
+    break;
+  case 5:
+    printf(1, " May");
+    break;
+  case 6:
+    printf(1, " Jun");
+    break;
+  case 7:
+    printf(1, " Jul");
+    break;
+  case 8:
+    printf(1, " Aug");
+    break;
+  case 9:
+    printf(1, " Sep");
+    break;
+  case 10:
+    printf(1, " Oct");
+    break;
+  case 11:
+    printf(1, " Nov");
+    break;
+  case 12:
+    printf(1, " Dec");
+    break;
+  }
+}
+
+void day_name(int x, int y, int z)
+{
+  int initial_day = 4;
+  int count = 0;
+  if (x > 1970)
+  {
+    for (int i = 1970; i < x; i++)
+    {
+      if (check_leap(i))
+        count += 366;
+      else
+        count += 365;
+    }
+  }
+  for (int i = 1; i < y; i++)
+  {
+    if (i == 2)
+    {
+      if (check_leap(x))
+        count += 29;
+      else
+        count += 28;
+    }
+    else if ((i < 8) && (i % 2 == 1))
+      count += 31;
+    else if ((i < 8) && (i % 2 == 0))
+      count += 30;
+    else if ((i >= 8) && (i % 2 == 0))
+      count += 31;
+    else
+      count += 30;
+  }
+  int final_day = (initial_day + count + z - 1) % 7;
+  switch (final_day)
+  {
+  case 0:
+    printf(1, "Sun");
+    break;
+  case 1:
+    printf(1, "Mon");
+    break;
+  case 2:
+    printf(1, "Tue");
+    break;
+  case 3:
+    printf(1, "Wed");
+    break;
+  case 4:
+    printf(1, "Thur");
+    break;
+  case 5:
+    printf(1, "Fri");
+    break;
+  case 6:
+    printf(1, "Sat");
+    break;
+  }
+}
+
+void time()
+{
+  struct rtcdate r;
+  if (date(&r))
+  {
+    printf(2, "date failed\n");
+    exit();
+  }
+  if (r.minute > 59)
+  {
+    r.hour += 8;
+    r.minute = r.minute - 59;
+  }
+  else
+  {
+    r.hour += 7;
+  }
+  if (r.hour >= 24)
+    r.hour -= 24;
+  printf(1, " %d:%d:%d", r.hour, r.minute, r.second);
+}
 ```
 Contoh saat command tree dijalankan:
 
