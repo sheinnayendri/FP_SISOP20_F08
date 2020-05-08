@@ -17,7 +17,48 @@ Agar kelima command dapat dicompile dan dirun pada QEMU, maka harus dilakukan ed
 #
 
 ## date
+Command date meminta kami menampilkan date atau time dengan beberapa kriteria yaitu:
+1. date
+2. date + "%d-%m-%y"
+3. date -s
+4. date -r
 
+Di mana command pertama untuk menampilkan date keseluruhan (default), kemudian command kedua untuk menampilkan date dengan format tertentu, date -s untuk memodifikasi date, dan date -r untuk menampilkan last modification time untuk file yang dipassing dalam argumen.
+
+Untuk mengimplementasikan fungsi date, kami harus memodifikasi 5 file terlebih dahulu (agar terdapat system yang dapat memanggil fungsi date). Kelima file tersebut adalah:
+1. syscall.h
+- menambahkan ```#define SYS_date 22```
+
+2. syscall.c
+- menambahkan ```[SYS_date] sys_date,``` pada fungsi ```static int (*syscalls[ ])(void).```
+
+3. sysprog.c
+- menambahkan:
+```c
+int sys_date(void)
+    {
+      struct rtcdate *r;
+      if(argptr(0, (void*)&r, sizeof(r)) < 0)
+       return -1;
+      cmostime(r);
+      return 0;
+     }
+```
+
+4. usys.S
+- menambahkan ```SYSCALL(date)```
+
+5. user.h
+- menambahkan ```int date(struct rtcdate *);```
+
+Untuk implementasi command date, harus secara manual melakukan *parsing* dari setiap mode yang diinginkan user, seperti ```%d, %m, %y```, serta melakukan perhitungan manual untuk hari bulan tanggal serta konversinya ke versi huruf atau angka. Di sini juga dibutuhkan fungsi untuk menentukan tahun kabisat atau tidak untuk menentukan pada bulan Februari 28 atau 29 hari, kemudian pada tahun tersebut secara total 365 atau 366 hari.
+
+Berikut implementasi command date, beserta fungsi-fungsinya:
+```c
+```
+Contoh saat command tree dijalankan:
+
+![date](https://user-images.githubusercontent.com/48936125/81392456-ea222300-9148-11ea-9623-fb13a15a1453.jpg)
 #
 
 ## tree
