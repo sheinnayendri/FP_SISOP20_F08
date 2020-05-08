@@ -185,6 +185,7 @@ UPROGS=\
 	_tail\
         _cmp\
 	_tree\
+	_date\
 
 fs.img: mkfs README new.txt test.txt $(UPROGS)
 	./mkfs fs.img README new.txt test.txt $(UPROGS)
@@ -254,7 +255,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	base64.c tail.c cmp.c tree.c\
+	base64.c tail.c cmp.c tree.c date.c\
 	printf.c umalloc.c\
 	README new.txt test.txt dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
